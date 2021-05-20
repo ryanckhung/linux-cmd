@@ -8,5 +8,11 @@ sudo passwd test03
 # -m creates the home directory if it does not exist.
 # -d overrides the default home directory location. -s sets the login shell for the user.
 
+# for restricted account use /bin/rbash which will limit it to work on the user home directory only
+sudo useradd -m -d /home/test04/ -s /bin/rbash test04
+
+#force the user to udpate the password during the next login
+sudo chage -d 0 test04
+
 # user list store in
 /ect/passwd

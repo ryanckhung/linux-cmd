@@ -3,8 +3,7 @@ scp localfile.tar developer@10.6.72.58:/home/developer/ryan
 scp <localfile> <username>@<IP>:<DestinationFullPath>
 
 # cerate a user with a home directory and bash as shell
-sudo useradd -m -d /home/test03/ -s /bin/bash -G sudo test03
+sudo useradd -m -d /home/test04/ -s /bin/bash test04
 sudo passwd test03 
 # -m creates the home directory if it does not exist.
 # -d overrides the default home directory location. -s sets the login shell for the user.
-# -G expects a comma-separated list of groups that the user should belong to.

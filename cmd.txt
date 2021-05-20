@@ -7,3 +7,6 @@ sudo useradd -m -d /home/test04/ -s /bin/bash test04
 sudo passwd test03 
 # -m creates the home directory if it does not exist.
 # -d overrides the default home directory location. -s sets the login shell for the user.
+
+# user list store in
+/ect/passwd

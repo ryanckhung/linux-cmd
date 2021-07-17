@@ -43,3 +43,39 @@ ls he??o*      -> list all files start with "he" then following any 2 characters
 ln f1.txt f1_link.txt    -> hard link (the content of either one change, both files content change; if the original file is gone, the link file will still exist)
 ln -s f2.txt f2_link.txt -> soft link (the content of either one change, both files content change; if the original file is gone, the link file will become broken)
 
+# command
+command option(s) argument(s)
+
+# file permission
+rwx - read, write, execute
+ugo - user, group, other(public)
+chmod ugo+r <filename>
+chmod 444 <filename>
+chown changes the ownership of a file
+chgrp changes the group ownership of a file
+
+# Help
+whatis <command>   -> whatis ls
+<command> –-help   -> ls -help 
+man <command>      -> man ls
+
+# Text Edit
+vi
+Redirect command output > or >> 
+echo > or >>
+
+# Pipe
+command1 [arguments] | command2 [arguments]
+ls -l | more
+
+# File command
+cp
+rm
+mv
+mkdir
+rmdir or rm -r
+chgrp
+chown
+
+# Display command
+• cat • more • less • head • tail (more/less/head/tail are only useful for long files only)

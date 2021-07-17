@@ -63,6 +63,7 @@ man <command>      -> man ls
 vi
 Redirect command output > or >> 
 echo > or >>
+ls -al > temp.txt    -> originally it is output to the sceen; but now the output is REDIRECTED to the file
 
 # Pipe
 command1 [arguments] | command2 [arguments]

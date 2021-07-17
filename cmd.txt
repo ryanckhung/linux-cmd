@@ -23,3 +23,23 @@ sudo chage -d 0 test04
 # install docker
 sudo apt-get install docker.io
 sudo systemctl start docker
+
+# find file under the current directory and it's subfolder
+find . -name hello.txt
+
+A filesystem is the methods and data structures that an operating system uses to keep track of files on a disk or partition; that is, the way the files are organized on the disk. The word is also used to refer to a partition or disk that is used to store the files or the type of the filesystem. Thus, one might say ``I have two filesystems'' meaning one has two partitions on which one stores files, or that one is using the ``extended filesystem'', meaning the type of the filesystem.
+
+#wildcard
+* - represents zero or more characters 
+? - represents a single character
+[] - represents a range of characters
+ls [abc]*      -> list all files start with a/b/c and following anything
+ls [a-c]*      -> same as above "a-c" mean abc
+ls [a-c][b-z]* -> first character is a-c, the next char is b-z, then follow anything
+ls [a-cx-z]*.  -> first character is abcxyz, then follow anything
+ls he??o*      -> list all files start with "he" then following any 2 characters then "o" then anything
+
+# hard link and soft link
+ln f1.txt f1_link.txt    -> hard link (the content of either one change, both files content change; if the original file is gone, the link file will still exist)
+ln -s f2.txt f2_link.txt -> soft link (the content of either one change, both files content change; if the original file is gone, the link file will become broken)
+

@@ -59,12 +59,27 @@ whatis <command>   -> whatis ls
 <command> –-help   -> ls -help 
 man <command>      -> man ls
 
+# input and output redirects
+1. standard input (stdin) - 0    => eg. what you type in keyboard
+2. standard output (stdout) - 1  => eg. what you see in the terminal; the terminal output can redirect to a file or ...
+3. stadnard error (stderr) - 2   => eg. no permission to access the /root folder
+example:
+ls -l /root 2> errfile.txt  => not root user access /root folder will give permssion eror; 2 means stderr; this cmd will only redirect the err msg to file
+
+# tee command
+echo hello world > file.txt => this will recirect the output to file only; but not terminal
+if you want to redirect the output to multiple place, you need to use tee. 
+echo hello world | tee file.txt => this will output it to screen and file
+echo hello world | tee -a file.txt => this will output it to screen and append (not rewrite because tee with -a option) new content to the file
+echo hello | tee f1.txt f2.txt f3.txt   => output to terminal and multiple file
+
 # Text Edit
 vi
 Redirect command output > or >> 
 echo > or >>
 ls -al > temp.txt    -> originally it is output to the sceen; but now the output is REDIRECTED to the file
 cat < file.txt       -> file.txt act as an input to cat
+wc -c file.txt       -> count the number of word in file
 
 # Pipe
 command1 [arguments] | command2 [arguments]
@@ -81,3 +96,6 @@ chown
 
 # Display command
 • cat • more • less • head • tail (more/less/head/tail are only useful for long files only)
+
+# Some useful command
+whoami, hostname, date

@@ -29,6 +29,7 @@ find . -name hello.txt
 
 A filesystem is the methods and data structures that an operating system uses to keep track of files on a disk or partition; that is, the way the files are organized on the disk. The word is also used to refer to a partition or disk that is used to store the files or the type of the filesystem. Thus, one might say ``I have two filesystems'' meaning one has two partitions on which one stores files, or that one is using the ``extended filesystem'', meaning the type of the filesystem.
 
+
 #wildcard
 * - represents zero or more characters 
 ? - represents a single character
@@ -39,12 +40,15 @@ ls [a-c][b-z]* -> first character is a-c, the next char is b-z, then follow anyt
 ls [a-cx-z]*.  -> first character is abcxyz, then follow anything
 ls he??o*      -> list all files start with "he" then following any 2 characters then "o" then anything
 
+
 # hard link and soft link
 ln f1.txt f1_link.txt    -> hard link (the content of either one change, both files content change; if the original file is gone, the link file will still exist)
 ln -s f2.txt f2_link.txt -> soft link (the content of either one change, both files content change; if the original file is gone, the link file will become broken)
 
+
 # command
 command option(s) argument(s)
+
 
 # file permission
 rwx - read, write, execute
@@ -54,10 +58,12 @@ chmod 444 <filename>
 chown changes the ownership of a file
 chgrp changes the group ownership of a file
 
+
 # Help
 whatis <command>   -> whatis ls
 <command> –-help   -> ls -help 
 man <command>      -> man ls
+
 
 # input and output redirects
 1. standard input (stdin) - 0    => eg. what you type in keyboard
@@ -66,12 +72,14 @@ man <command>      -> man ls
 example:
 ls -l /root 2> errfile.txt  => not root user access /root folder will give permssion eror; 2 means stderr; this cmd will only redirect the err msg to file
 
+
 # tee command
 echo hello world > file.txt => this will recirect the output to file only; but not terminal
 if you want to redirect the output to multiple place, you need to use tee. 
 echo hello world | tee file.txt => this will output it to screen and file
 echo hello world | tee -a file.txt => this will output it to screen and append (not rewrite because tee with -a option) new content to the file
 echo hello | tee f1.txt f2.txt f3.txt   => output to terminal and multiple file
+
 
 # Text Edit
 vi
@@ -81,41 +89,222 @@ ls -al > temp.txt    -> originally it is output to the sceen; but now the output
 cat < file.txt       -> file.txt act as an input to cat
 wc -c file.txt       -> count the number of word in file
 
+Flow to use (use up/down/left/right to move the key; not in insert mode)
+1. use arrow key to move to the right place
+2. click the command
+3. then press escape key
+4. loop to step 1
+cmd: d - delete the whole line; x - remove a single char; i - insert character; /xxx - serach xxx in the file; r - Replace
+:q! - quit; :wq! - write then quit; Escape - escape mode
+
+
 # Pipe
 command1 [arguments] | command2 [arguments]
 ls -l | more      -> less = more + some addition features
 ls -l | tail -1   -> show the last one
 
+
 # File command
 cp, rm, mv, mkdir, rmdir or rm -r, chgrp, chown
+
 
 # Display command
 cat, more, less, head, tail (more/less/head/tail are only useful for long files only)
 tail -2 <file_name>     -> show the last two lines in a file
 head -2 <file_name>     -> show the fist two lines in a file
 
+
 # Some useful command
 whoami, hostname, date
+
 
 # grep/egrep -> awk -> cut (these three command always use together; grep consider for text/screen output, awk get the col, cut get few words)
 grep | awk | cut    -> grep / pipe / awk / pipe / cut
 
-# cut
-• cut filename =
-• cut --version =
-• cut –c1 filename =
-• cut –c1,2,4 =
-• cut –c1-3 filename =
-• cut –c1-3,6-8 filename =
-• cut –b1-3 filename =
-• cut -d: -f 6 /etc/passwd =
-• cut -d: -f 6-7 /etc/passwd =
-• ls –l | cut –c2-4 =
-Does not work
-Check version
-List one character
-Pick and chose character
-List range of characters
-List specific range of characters List by byte size
-List first 6th column separated by :
-List first 6 and 7th column separated by : Only print user permissions of files/dir
+
+# cut (consider in character level; -c1-10 means get char 1 to 10 of each row)
+> cut filename = Does not work
+> cut --version = Check version
+> cut –c1 filename = List one character
+> cut –c1,2,4 filename = Pick and chose character
+> cut –c1-3 filename = List range of characters
+> cut –c1-3,6-8 filename = List specific range of characters 
+> cut –b1-3 filename = List by byte size
+> cut -d: -f 6 /etc/passwd = List first 6th column separated by :
+> cut -d: -f 6-7 /etc/passwd = List first 6 and 7th column separated by : 
+> ls –l | cut –c2-4 = Only print user permissions of files/dir
+
+
+# awk (proess row by small inline program)
+> awk --version = Check version
+> awk ‘{print $1}’ file = List 1st field from a file
+> ls –l | awk ‘{print $1,$3}’ = List 1 and 3rd field of ls –l output
+> ls –l | awk ‘{print $NF}’ = Last field of the output
+> awk '/Jerry/ {print}' file = Search for a specific word
+> awk -F: '{print $1}' /etc/passwd = Search for a specific word
+> echo "Hello Tom" | awk '{$2="Adam"; print $0}‘ = Ouput only 1st field of /etc/passwd
+> cat file | awk '{$2=“Imran"; print $0}‘ = Replace words field words
+> awk 'length($0) > 15‘ file = Replace words field words
+> ls -l | awk '{if($9 == "seinfeld") print $0;}‘ = Get lines that have more than 15 byte size
+> ls -l | awk '{print NF}‘ = Get the field matching seinfeld in /home/iafzal = Number of fields.
+* NF means last column, $1 means column 1; $2 means column 2; $0 means all column
+*-F: means : is delimiter (default is separated by space)
+
+
+# grep / egrep (egrep is the extended version of grep, can search for multiple keywords from a file) (grep get keyword from a row)
+> grep –-version OR grep --help = Check version or help
+> grep keyword file = Search for a keyword from a file
+> grep –c keyword file = Search for a keyword and count
+> grep –i KEYword file = Search for a keyword ignore case-sensitive
+> grep –n keyword file = Display the matched lines and their line numbers (same as "grep keyword file" but with line number)
+> grep –v keyword file = Display everything but keyword (all but exclude the keyword)
+> grep keyword file | awk ‘{print $1}’ = Search for a keyword and then only give the 1st field • ls –l | grep Desktop = Search for a keyword and then only give the 1st field
+> egrep –i “keyword|keyword2” file = Search for 2 keywords.
+* grep with -i options means ignore case sensitivity
+* grep with -c search keyword and count
+* egrep search multiple keyword from a single file
+
+
+# sort and uniq (sort the content inside the file or output from terminal)
+> sort –-version OR sort --help = Check version or help
+> sort file = Sorts file in alphabetical order
+> sort –r file = Sort in reverse alphabetical order 
+> sort –k2 file = Sort by field number
+> uniq file = Removes duplicates (uniq must work with sort; uniq alone is not working)
+> sort file | uniq = Always sort first before using uniq their line numbers 
+> sort file | uniq –c = Sort first then uniq and list count
+> sort file | uniq –d = Only show repeated lines.
+> ls -l | sort -k9
+* sort -k2 means sort by column 2 (defualt delimiter is space)
+
+
+# wc (word counter; newline count, word count, and byte count)
+> wc <filename>
+> ls -l | grep drw | wc
+
+
+# compare file; diff (compare line by line); cmp (compare byte by byte)
+
+
+# compress; tar and gzip
+> tar cvf xxx.tar xxx   -> create a tar file (xxx.tar) from xxx fold
+> tar xcf xxx.tar       -> extract a tar file
+> tar tvf xxx.tar       -> list the content inside the tar file
+> gzip xxx.tar          -> zip the tar file (xxx.tar will be deleted and created a xxx.tar.gz)
+> gzip -d xxx.tar.gz    -> unzip the tar file (xxx.tar.gz will be deleted and created a xxx.tar file)
+
+
+# truncate command is often used to shrink or extend the size of a file to the specified size
+> truncate –s 10 <filename>     -> chop it into 10 bytes
+
+
+# combine and splitting file
+> cat file1 file2 file3 > file4
+> split –l 300 file.txt childfile   -> Split file.txt into 300 lines per file and output to childfileaa, childfileab and childfileac
+
+
+# sed command have the following functions:
+• Replace a string in a file with a newstring • Find and delete a line
+• Remove empty lines
+• Remove the first or n lines in a file
+• To replace tabs with spaces
+• Show defined lines from a file • Substitute within vi editor
+• And much more...
+
+sed 's/Kenny/Lenny//g' <filename>       -> search Kenny and replace with Lenny globally (will not update the file)
+sed -i 's/Kenny/Lenny//g' <filename>    -> same as above but "-i" will allow overwrite
+sed '/peter/d' <filename>               -> delete all lines with peter (put -i if need to update the file)
+sed '/^$/d' <filename>                  -> delete all emptylines; ^ starting $ ending; ^$ nothing inside between start and end means empty lines
+sed '1d' <filename>                     -> first line of the file is deleted
+sed '1,2d' <filename>                   -> delete the frist two lines of the file
+sed 's/\t/ \g' <filename>               -> replace tab(\t) with space(/ ) globally (\g)
+sed -n 12,18p <filename>                -> show line 12-18 only
+* -i will overwrite the file
+
+
+
+
+# account management
+> useradd spiderman       -> create an account (may not create /home/spiderman)
+> id spiderman            -> check created user account (check userid groupid)
+> groupadd superheros     -> create group
+> cat /etc/group          -> check group
+> userdel -r spiderman    -> delete user (-r option will remove /home/spiderman)
+> groupdel superheros     -> delete group
+
+> useradd ironman                   -> create a user will auso add it into the group with the same name
+> id ironman                        -> check group name = user name
+> groupadd superheros               -> create a user group
+usermod (use to update user info, eg add an existing user info to group)
+> usermod -G superheros ironman     -> change group
+> id ironman                        -> now you can see uid=1001(ironman) gid=1001(ironman) groups=1001(ironman),1002(superheros) [ironman belongs to both ironman and superheros group]
+> grep ironman /etc/group
+
+a more complete way to create an account; -g (group) -s (shell) -c (content description) -m -d(home directory)
+> useradd -g superheros -s /bin/bash -c "heros" -m -d /home/spiderman spiderman
+> passwd spiderman
+
+Commands
+• useradd • groupadd • userdel • groupdel • usermod
+Files
+• /etc/passwd • /etc/group • /etc/shadow
+
+
+
+Acount management
+> su - spiderman    -> assume you are ironman now, you want to switch to spiderman, type "su - spiderman"
+> exist             -> switch back to orignal user (ironman in this case)
+> su -              -> swithc to root
+> whoami            -> check the current user
+if you are ironman, you can't access /home/spiderman. (unless permission is given)
+after created the account, the root user need to add the sudo permission to this newly created account
+the following line add permission for ironman to run sudo
+> sudo usermod -aG sudo ironman
+> cat /etc/sudoers
+
+
+Monitor Users
+> who                                       -> how many people currently login
+> last                                      -> details login status
+> last | awk '{print $1}'                   -> show 1st column of the login details
+> last | awk '{print $1}' | sort | uniq     -> only show the unique user
+> w                                         -> similar to who but with more details
+
+
+Talking to Users
+> wall              -> send message to all user; after type wall; then edit message; then Ctrl+D will boardcast to all Users
+> users             -> see who is online
+> write <username>  -> send to particalar user;        
+
+
+
+System command
+> date
+> uptime        -> how long the system is up
+> hostname
+> uname -a      -> Linux version
+> which <cmd>   -> where is the cmd located in the machine
+> cal           -> show the calender
+> cal 6 1978    -> show that month only
+> cal 2021      -> show all months in year 2021
+> bc            -> calculator
+
+
+Application = Services
+Daemon is something continue running in the background until interrupt
+> systemctl or service
+> ps
+> top                   -> show base on the load
+> kill                  -> kill the process; can use "systemctl top" or "kill" to stop a services like apache server
+> crontab               -> schedule an Application
+> at                    -> similar to crontab but in one time basis
+
+To start an application
+> systemctl restart ntpd    -> ntpd the final "d" stand for daemon
+> ps -ef | grep ntpd
+> systemctl status ntpd     -> check service status
+> systemctl stop ntpd       -> stop service
+> ps -ef | grep ntpd
+> systemctl enable ntpd
+> top
+> systemctl stop ntpd   OR    kill <processid>

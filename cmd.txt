@@ -83,19 +83,39 @@ wc -c file.txt       -> count the number of word in file
 
 # Pipe
 command1 [arguments] | command2 [arguments]
-ls -l | more
+ls -l | more      -> less = more + some addition features
+ls -l | tail -1   -> show the last one
 
 # File command
-cp
-rm
-mv
-mkdir
-rmdir or rm -r
-chgrp
-chown
+cp, rm, mv, mkdir, rmdir or rm -r, chgrp, chown
 
 # Display command
-• cat • more • less • head • tail (more/less/head/tail are only useful for long files only)
+cat, more, less, head, tail (more/less/head/tail are only useful for long files only)
+tail -2 <file_name>     -> show the last two lines in a file
+head -2 <file_name>     -> show the fist two lines in a file
 
 # Some useful command
 whoami, hostname, date
+
+# grep/egrep -> awk -> cut (these three command always use together; grep consider for text/screen output, awk get the col, cut get few words)
+grep | awk | cut    -> grep / pipe / awk / pipe / cut
+
+# cut
+• cut filename =
+• cut --version =
+• cut –c1 filename =
+• cut –c1,2,4 =
+• cut –c1-3 filename =
+• cut –c1-3,6-8 filename =
+• cut –b1-3 filename =
+• cut -d: -f 6 /etc/passwd =
+• cut -d: -f 6-7 /etc/passwd =
+• ls –l | cut –c2-4 =
+Does not work
+Check version
+List one character
+Pick and chose character
+List range of characters
+List specific range of characters List by byte size
+List first 6th column separated by :
+List first 6 and 7th column separated by : Only print user permissions of files/dir

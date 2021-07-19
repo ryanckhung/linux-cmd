@@ -295,7 +295,8 @@ Daemon is something continue running in the background until interrupt
 > systemctl or service
 > ps
 > top                   -> show base on the load
-> kill                  -> kill the process; can use "systemctl top" or "kill" to stop a services like apache server
+> kill <process_id>     -> kill the process; can use "systemctl top" or "kill" to stop a services like apache server
+> kill -9 <process_id>  -> add -9 if simple kill <process id> is not working
 > crontab               -> schedule an Application
 > at                    -> similar to crontab but in one time basis
 

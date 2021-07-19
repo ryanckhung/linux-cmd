@@ -328,6 +328,17 @@ A crontab file has five fields for specifying day , date and time followed by th
 5,10  0  10  *  1  =>  At 12.05,12.10 every Monday & on 10th of every month
 Related file => /etc/cron.d/
 > ls -l /etc/cron.*
+> cd /etc
 > ls -l | grep cron
 if you want to run the script daily, put it in /etc/cron.daily
+/etc/cron.hourly, /etc/cron.monthly, /etc/cron.weekly
+
+> cat /etc/anacrontab       -> check what is running
+> cat /etc/cron.d/0hourly   -> check hourly cron job
+
+the modulus operator(/) to run a cron job after every specific time interval. 
+For instance, to run a cron job after every 15 minutes,
+*/15
+
+sudo nano /etc/crontab
 

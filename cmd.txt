@@ -96,6 +96,8 @@ Flow to use (use up/down/left/right to move the key; not in insert mode)
 4. loop to step 1
 cmd: d - delete the whole line; x - remove a single char; i - insert character; /xxx - serach xxx in the file; r - Replace
 :q! - quit; :wq! - write then quit; Escape - escape mode
+Cursor movement—h, j, k, l (left, down, up, and right)
+0 - enter key to create a new line and auto enter the insert mode
 
 
 # Pipe
@@ -341,4 +343,9 @@ For instance, to run a cron job after every 15 minutes,
 */15
 
 sudo nano /etc/crontab
+
+How to use it?
+> export EDITOR=vi                  -> set the editor to vi by the terminal command
+> crontab -e                        -> will redirect to vi editor
+> * * * * * /bin/echo "success"     -> key in the this in the vi editor
 

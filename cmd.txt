@@ -345,7 +345,8 @@ For instance, to run a cron job after every 15 minutes,
 sudo nano /etc/crontab
 
 How to use it?
-> export EDITOR=vi                  -> set the editor to vi by the terminal command
-> crontab -e                        -> will redirect to vi editor
-> * * * * * /bin/echo "success"     -> key in the this in the vi editor
-
+> export EDITOR=vi                                                      -> set the editor to vi by the terminal command
+> crontab -e                                                            -> will redirect to vi editor
+> * * * * * /bin/echo "success" >> /Users/ryan/Desktop/temp/cron.txt    -> key in the this in the vi editor
+after you write the command by crontab -e; save it; then it will automatically run the schedule task
+other examples: > * * * * * /bin/date >> /Users/ryan/Desktop/temp/date.txt  -> output date time

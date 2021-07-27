@@ -350,3 +350,185 @@ How to use it?
 > * * * * * /bin/echo "success" >> /Users/ryan/Desktop/temp/cron.txt    -> key in the this in the vi editor
 after you write the command by crontab -e; save it; then it will automatically run the schedule task
 other examples: > * * * * * /bin/date >> /Users/ryan/Desktop/temp/date.txt  -> output date time
+
+
+
+Process (try the following one by one; jobs - display the status of jobs in the current shell)
+> sleep 50
+> Ctrl+z        (stop sleep 50)
+> sleep 50 &    (make the command to run in background)
+> jobs          (list all the stop/running command)
+> ps -ef | grep sleep
+> fg            (bring backgound process ot foreground)
+> Ctrl + z      (will bring the just fg command stopped)
+> bg            (make the command to background)
+> jobs
+
+> nice -n 5 sleep 50    (change the priority of the process)
+nice range from -20 to 19; lower number higher priortiy
+
+> sleep 100
+> Ctrl+z        (after you stop it then type bg, will make the stop task keep running in background)
+> bg            (no need to enter any option, it will send sleep 50 to background)
+> jobs          (list all stop/running command)
+
+
+
+
+System
+> top
+> df -h
+> dmesg                 (system error/warning message - eg. memory leak)
+> iostat
+> iostat 1              (refresh every 1 second)
+> netstat -rw
+> free                  (read memeory)
+> cat /proc/cpuinfo
+> cat /proc/memoinfo
+
+
+Log 
+/var/log (this folder contain a list of info about log)
+eg /var/log/boot.log    (about boot)
+   /var/log/cron        (about cron)
+   /var/log/secure      (about login)
+
+
+System Maintenance (need to be root)
+> shutdown
+> init 0-6      (init 6 = reboot)
+> reboot
+> halt          (force to shutdown = force to press the physical power button)
+
+
+
+hostname (must be root)
+> hostname
+> cat /etc/hostname
+> hostnamectl set-hostname hostname
+> cat /etc/hostname (or > hostname)
+
+
+
+Finding System Info.
+> uname -a      (find the linux version)
+> dmidecode
+> arch          (32/64 bits)
+
+
+
+Terminal cmd
+> clear
+> exit
+> script filename.log   (will start record all the thing happen in the terminal; type "exit" to quit)
+after you type "script filename.log" -> it will show "Script started, file is filename.log"
+then it will keep recording all the things you type; type "exit" to quit; then it will show "Script done, file is filename.log"
+there is a file filename.log is created
+
+
+
+Recover root password (just for simple reference)
+1. Restart computer
+2. edit GRUB
+3. change password
+4. reboot
+
+
+
+Environment Variable
+> printenv          (view the environment variable)
+> env               (=printenv)
+> echo $SHELL       (view a particalar variable; $SHELL is one of the variable name; $ is env. var.)
+> echo $PATH
+> echo $HOME
+> export TEST = 1   (set environment variable; this is not permanently; this env var will loss after terminal closed)
+> echo $TEST        (read the environment variable)
+set enviroment variable permanently, you need to do the following:
+> vi .bashrc
+> TEST = '123'      (add this line to .bashrc)
+> export TEST       (add this line to .bashrc)
+set global enviroment variable permanently
+> vi /etc/profile or > vi /etc/bashrc
+> TEST = '123'              (add this line to the file)
+> export TEST               (add this line to the file)
+$HOME -> start with $ sign means environment variable
+> cd $HOME  (same as cd ~)
+> echo $HOME
+
+
+
+
+System Run Level (in root level)
+> init 0-6 
+Main Run level
+• 0     Shut down (or halt) the system
+• 1     Single-user mode; usually aliased as s or S
+• 6     Reboot the system
+Other Run levels
+• 2     Multiuser mode without networking
+• 3     Multiuser mode with networking
+• 5     Multiuser mode with networking and GUI.
+> who -r    (check which run level currently in)
+
+
+Linux Boot process
+BIOS -> MBR (Master Boot Record) -> GRUB (Grand Unified Bootloader) -> Kernel -> Init -> Runlevel
+
+
+Message of the day
+message located in /etc/motd
+> vi /etc/motd      -> write something in the /etc/motd file, eg "Hello World"
+quit and then relogin, then you will see the "Hello World" message
+
+
+Disk partition
+> df -h             -> check disk free
+> fdisk -l          -> tell how much the disk total size is and how many partition is created)
+Add a hard drive into the machine
+> fdisk -l          -> you can see /dev/sdb is added (/dev/sdb is the name of the harddisk)
+> fdisk /dev/sdb    -> create the new partition, after entering this command you need to follow the instruction step by step
+press "n" for create a partition
+then it will ask if it's primary or extended
+press "p" for primary
+finally press "w" to write the table to the disk and exist  (udemy lesson 168)
+after created, type > fdisk -l (then you will see /dev/sdb1 - partition 1 is created)
+after crated the partition, we need to assign file system by the following command
+> mkfs.xfs /dev/sdb/
+then create a folder called data under root (that's /data)
+then mount the drive to the /data by 
+> mount /dev/sdb/ /data
+> df -h      (check the disk)
+* up to this moment, after reboot, it will unmounted, to prevent it's gone after rebook, we need to
+> vi /etc/fstab     (then add the following line to this file)
+/dev/sdb/   /data   xfs     defaults    0   0
+
+in general:
+partition   ->  assign file system  ->  mount
+
+
+
+Logical Volume Management (LVM)
+LVM allows disk to be combined together
+when created a partition, you can select LVM
+Hard disk -> /dev/sda, /dev/sdb, /dev/sdc
+partition -> /dev/sda1, /dev/sda2, /dev/sda3
+
+
+Swap Space
+swap space = use harddisk to store memory data (when the ram is full)
+can set swap size = 2 x ram size
+> free -m   (check memory)
+> dd if=/dev/zero of=/newswap bs=1M count 1024 (create 1G file)
+> mkswap /newswap       (swap is make; this will be gone after reboot)
+> swapon /newswap       (swap is on; this will be gone after reboot)
+> free -m
+to make it save after reboot
+> vi /etc/fstab     (add the following line into the file)
+/newswap    swap    swap    defaults    0   0
+
+
+
+RAID
+RAID0: eg. 2 harddisk, 5G+5G=10G (no duplication)
+RAID1: eg. 2 harddisk, 5G+5G=5G  (fully duplicated)
+RAID5: eg. at least 3 harddisk, 5G+5G+5G=12G    (can recover if one disk is failed)

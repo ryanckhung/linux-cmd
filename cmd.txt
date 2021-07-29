@@ -539,12 +539,27 @@ RAID5: eg. at least 3 harddisk, 5G+5G+5G=12G    (can recover if one disk is fail
 Network Files
 /etc/nsswitch.conf
 /etc/hosts
-/etc/sysconfig/network
-/etc/sysconfig/network-script
-/etc/resolv.conf
+/etc/hostname
+/etc/sysconfig/network-scripts
+/etc/resolv.conf                (tells the dns server)
 
 > vi /etc/hosts  (like a DHCP server, you can add the local host IP and the name here)
 inside the file, you can write
 127.0.0.1 ryanhung
 save it and then run 
 > ping ryanhung
+
+network command
+> ping
+> ifconfig
+> ifup or ifdown    (make an interface up or down)
+> netstat -rnv      (check the gateway)
+> tcpdump -i enp0s3 (provide the interface name and check the traffic in and out)
+> ip
+
+
+
+Network Interface Card (NIC)
+> ifconfig                      (show all the interface name)
+> ethtool <interface_name>      (show the details of the interface)
+lo = loopback device is a special interface that your computer uses to communicate with itself. It is used mainly for diagnostics and troubleshooting, and to connect to servers running on the local machine.

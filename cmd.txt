@@ -1,6 +1,7 @@
 # copy local file to remote server
 scp localfile.tar developer@10.6.72.58:/home/developer/ryan
 scp <localfile> <username>@<IP>:<DestinationFullPath>
+scp <username>@<IP>:<RemoteFilePath> <local_dicrectory_path>
 
 # cerate a user with a home directory and bash as shell
 sudo useradd -m -d /home/test04/ -s /bin/bash test04
@@ -563,3 +564,150 @@ Network Interface Card (NIC)
 > ifconfig                      (show all the interface name)
 > ethtool <interface_name>      (show the details of the interface)
 lo = loopback device is a special interface that your computer uses to communicate with itself. It is used mainly for diagnostics and troubleshooting, and to connect to servers running on the local machine.
+virb0 = virtual bridge 0 interface is used for NAT. Virtual enviroments sometimes use it to connect to the outside network.
+
+NIC Bonding (details refer to session 131)
+NIC bonding is also known as Networking Bonding. It can be defined as the aggregation of mulitple NIC into a signle bond interface.
+It's main purpose is to provide high availability and redundancy.
+Simply speaking NIC bonding is use to bind severals ports together and use it as a single interface.
+
+
+Downloading Files or Apps (wget)
+wget just like the browswer to download something from the internet
+> wget http://website.com/filename      (this will save it as a file, even it's a html page)
+
+
+
+Network Commands
+> ping
+> curl <url>
+
+
+
+FTP - Port 21
+server need to run the ftpd (d stand for daemon) @ port 21
+> sudo apt-get install vsftpd   (this is server)
+> vi /etc/vsftpd.conf           (backup before make any change)
+inside /etc/vsftpd.conf, remove the comment of "write_enable=YES"
+inside /etc/vsftpd.conf, add "local_root=/home/ryanhung/Desktop/ftp" 
+> systemctl restart vsftpd
+
+> systemctl start vsftpd
+> systemctl status vsftpd
+> systemctl enable vsftpd
+> systemctl stop firewalld
+> systemctl disable firewalld
+
+install ftp in client
+> sudo apt-get instll ftp
+> ftp 192.168.1.x
+then enter usersname password, then it will enter "ftp>"
+ftp> bin
+ftp> hash
+ftp> put <filename>         (upload file)
+ftp> get <filename>         (download file)
+ftp> bye                    (quit ftp)
+
+
+
+RSYNC
+rsync is a utility for efficiently transferring and synchronizing files within the same computer or to a remote computer by comparing the modification times and sizes of files
+this utility is mostly used to backup the files and directories from one server to another
+rsync port = 22 (same as ssh)
+assume first time abc.txt is 2M and transfer from machine A to machine B
+then next time abc.txt is updated to 3M, then only 1M (the diff. part) is transfer from machine A to machine B
+installation
+> apt-get install rsync     
+cmd format: rysnc options source Destination
+rsync a file on a local machine
+> rsync -zvh backup.tar /tmp/backups/
+rsync a directory on a local machine
+> rsync -azvh /home/ryanhung /tmp/backups/
+rsync a file to a remote machine
+> rsync -avz backup.tar ryanhung@192.168.0.10:/tmp/backups
+rsync a file from a remote machine
+rsync -avzh ryanhung@192.168.0.10:/home/ryanhung/serverfile /tmp/backups   (home/ryanhung/serverfile is the remote file; /tmp/backups is the local destination)
+
+
+Hostname or IP Lookup
+> nslookup                  (then it enter a tool; type the domain name like www.google.com; it will return the ip address; type "exit" to quit the tool)
+> nslookup www.google.com   (then it shows the answer directly)
+> dig www.google.com        (similar to nslookup)
+
+
+
+Network Time Protocol (NTP) for time synchronization
+Install: sudo apt-get install ntp
+Port: 123
+File: /etc/ntp.conf
+Service systemctl restart ntpd
+command: ntpq
+8.8.8.8 is google dns server
+> ps -ef  | grep ntp            (check if ntp is running)
+> ntpq                          (then it will enter the tool mode, you can type "peers" to check the time server; type "quit" to leave)
+
+
+
+
+Trace Network traffic (traceroute)
+traceroute is used to map the journey that a packet of information undertakes from its soruce to its destination. traceroute can be used to locate when data loss occurs throughout a network, which could signify a node that's down.
+also can help to identiy the slow points
+> traceroute www.google.com
+
+
+
+
+Central Logger (rsyslog) - need to try it out by yourself
+Purpose: Generate logs or collect logs from other servers
+Reference: https://linoxide.com/how-to-setup-central-logging-server-using-rsyslog-on-ubuntu-20-04/
+Config. file: /etc/rsyslog.conf
+> sudo apt-get install rsyslog
+> ps -aux   | grep rsyslog
+> vi /etc/rsyslog.conf          
+inside the above file, uncomment the following lines
+# provides UDP syslog reception
+module(load="imudp")
+input(type="imudp" port="514")
+# provides TCP syslog reception
+module(load="imtcp")
+input(type="imtcp" port="514")
+> systemctl restart rsyslog
+> systemctl enable rsyslog
+
+
+
+
+Sendmail (for details, need to try it later)
+Purpose: send and receive emails, usually use when something finsihed then send an email for notification
+> sudo apt-get install sendmail
+> sudo apt-get install sendmail-cf
+> cd /etc/mail
+Files:
+/etc/mail/sendmail.mc
+/etc/mail/sendmail.cf
+/etc/mail
+> systemctl restart sendmail
+> mail -s "subject line" name@mydomain.com
+
+
+
+SSH-Keys - Access Remote Server without password
+Keys are generated at user level
+Generate the keys in client side. Copy the Keys from client to server.
+[Step 1-3 are done in client side]
+Step 1 - Generate the Keys in client side
+> ssh-keygen
+Step 2 - Copy the key to the server from client side
+> ssh-copy-id root@192.168.1.10
+Step 3 - Login from client to server
+> ssh root@192.168.1.10
+
+
+
+Shell Script example
+#!/bin/bash
+# Simple output script
+echo "Hello World"
+save it as test.sh and then change the permission to
+> chmod 744 test.sh 
+> ./test.sh             (to run the shell script)

@@ -25,8 +25,28 @@ sudo chage -d 0 test04
 sudo apt-get install docker.io
 sudo systemctl start docker
 
-# find file under the current directory and it's subfolder
-find . -name hello.txt
+
+
+# Find all the files whose name is tecmint.txt in a current working directory.
+> find . -name tecmint.txt
+# Find all the files under /home directory with name tecmint.txt.
+> find /home -name tecmint.txt
+# Find all the files whose name is tecmint.txt and contains both capital and small letters in /home directory.
+> find /home -iname tecmint.txt
+# Find all directories whose name is Tecmint in / directory.
+> find / -type d -name Tecmint
+# Find all php files whose name is tecmint.php in a current working directory.
+> find . -type f -name tecmint.php
+# Find all php files in a directory.
+> find . -type f -name "*.php"
+# Find all the files whose permissions are 777.
+> find . -type f -perm 0777 -print
+# Find all the files without permission 777.
+> find / -type f ! -perm 777
+# Find all Read Only files.
+> find / -perm /u=r
+option -maxdepth can control the depth of searching
+
 
 A filesystem is the methods and data structures that an operating system uses to keep track of files on a disk or partition; that is, the way the files are organized on the disk. The word is also used to refer to a partition or disk that is used to store the files or the type of the filesystem. Thus, one might say ``I have two filesystems'' meaning one has two partitions on which one stores files, or that one is using the ``extended filesystem'', meaning the type of the filesystem.
 
@@ -58,7 +78,17 @@ chmod ugo+r <filename>
 chmod 444 <filename>
 chown changes the ownership of a file
 chgrp changes the group ownership of a file
-
+SUID, SGID, STICKY BIT
+https://www.thegeekdiary.com/what-is-suid-sgid-and-sticky-bit/
+rwSrwSrwT (first S = SUID, second S = SGID, T = stick bit)
+> sudo chmod u+s myfile
+> sudo chmod 4755 myfile (4755's 4 = u, 4755  = u+s)
+similarly
+> sudo chmod g+s myfile
+> sudo chmod 2755 myfile (2755's 2=g, 2755=g+s)
+Sticky bit make anyone can read or write; but only root or owner can delete it
+> sudo chmod +t myfile     (t must be refer to other/public)
+> sudo chmod 1755 myfile   (1755's 1=other, 1755=+t; )
 
 # Help
 whatis <command>   -> whatis ls
@@ -72,6 +102,11 @@ man <command>      -> man ls
 3. stadnard error (stderr) - 2   => eg. no permission to access the /root folder
 example:
 ls -l /root 2> errfile.txt  => not root user access /root folder will give permssion eror; 2 means stderr; this cmd will only redirect the err msg to file
+File descriptor 1 is the standard output (stdout).
+File descriptor 2 is the standard error (stderr).
+2>&1  -> ">&" as redirect merger operator
+
+
 
 
 # tee command
@@ -86,16 +121,44 @@ echo hello | tee f1.txt f2.txt f3.txt   => output to terminal and multiple file
 vi
 Redirect command output > or >> 
 echo > or >>
-ls -al > temp.txt    -> originally it is output to the sceen; but now the output is REDIRECTED to the file
-cat < file.txt       -> file.txt act as an input to cat
-wc -c file.txt       -> count the number of word in file
+ls -al > temp.txt       -> originally it is output to the sceen; but now the output is REDIRECTED to the file
+cat < file.txt          -> file.txt act as an input to cat
+wc -c file.txt          -> count the number of word in file
+cat <<< "hello world"   -> <<< indicated the right hand side is string
+
+在shell脚本中，默认情况下，总是有三个文件处于打开状态，标准输入(键盘输入)、标准输出（输出到屏幕）、标准错误（也是输出到屏幕），它们分别对应的文件描述符是0，1，2 。
+>  默认为标准输出重定向，与 1> 相同
+2>&1  意思是把 标准错误输出 重定向到 标准输出.
+&>file  意思是把标准输出 和 标准错误输出 都重定向到文件file中
+
+There are two main output streams in Linux (and other OSs), standard output (stdout) and standard error (stderr). 
+Error messages, like the ones you show, are printed to standard error. 
+The classic redirection operator (command > file) only redirects standard output, so standard error is still shown on the terminal. 
+To redirect stderr as well, you have a few choices:
+1. Redirect stdout to one file and stderr to another file:
+> command > out 2>error
+2. Redirect stdout to a file (>out), and then redirect stderr to stdout (2>&1):
+> command >out 2>&1
+3. Redirect both to a file
+> command &> out
+
+More example
+> ls /root > err.txt    (assume you are not the root; this will not write anything to the err.txt; it show the error on the terminal)
+> ls /root 2> err.txt   (assume you are not the root; this will output the error message to err.txt; it is "2>" but not "2 >")
+> ls /root > success.txt 2> error.txt  (if the command success, will write to success.txt else write to error.txt)
+> ls . > success.txt 2> error.txt      (if the command success, will write to success.txt else write to error.txt)
+
+
+
+
 
 Flow to use (use up/down/left/right to move the key; not in insert mode)
 1. use arrow key to move to the right place
 2. click the command
 3. then press escape key
 4. loop to step 1
-cmd: d - delete the whole line; x - remove a single char; i - insert character; /xxx - serach xxx in the file; r - Replace
+cmd: d - delete the whole line; x - remove a single char; i - insert character; a - similar to i but it is append; /xxx - serach xxx in the file; r - Replace
+yy - copy the line; p - paste for a copied line
 :q! - quit; :wq! - write then quit; Escape - escape mode
 Cursor movement—h, j, k, l (left, down, up, and right)
 0 - enter key to create a new line and auto enter the insert mode
@@ -117,8 +180,13 @@ tail -2 <file_name>     -> show the last two lines in a file
 head -2 <file_name>     -> show the fist two lines in a file
 
 
+
 # Some useful command
 whoami, hostname, date
+whereis <cmd>              -> show the path of the command and also it's config file
+alias                      -> full command map to shortcut command
+file <filename>            -> determine file type
+edquota                    -> edit user quotas
 
 
 # grep/egrep -> awk -> cut (these three command always use together; grep consider for text/screen output, awk get the col, cut get few words)
@@ -226,6 +294,10 @@ sed -n 12,18p <filename>                -> show line 12-18 only
 
 
 
+The tr command can perform operations like removing repeated characters, converting uppercase to lowercase, and basic character replacing and removing. Typically, it is used in combination with other commands through piping.
+> echo "hello      world" > a.txt
+> tr -s ' '  < a.txt                      -> remove many space into single space
+
 
 # account management
 > useradd spiderman       -> create an account (may not create /home/spiderman)
@@ -287,6 +359,7 @@ System command
 > hostname
 > uname -a      -> Linux version
 > which <cmd>   -> where is the cmd located in the machine
+> whereis <cmd> -> similar to which but it also tell where is the config file
 > cal           -> show the calender
 > cal 6 1978    -> show that month only
 > cal 2021      -> show all months in year 2021
@@ -397,9 +470,10 @@ eg /var/log/boot.log    (about boot)
 
 System Maintenance (need to be root)
 > shutdown
-> init 0-6      (init 6 = reboot)
+> init 0-6           (init 6 = reboot)
 > reboot
-> halt          (force to shutdown = force to press the physical power button)
+> halt               (force to shutdown = force to press the physical power button)
+> shutdown -r now    (shutdown immediately)
 
 
 
@@ -442,15 +516,15 @@ Environment Variable
 > echo $SHELL       (view a particalar variable; $SHELL is one of the variable name; $ is env. var.)
 > echo $PATH
 > echo $HOME
-> export TEST = 1   (set environment variable; this is not permanently; this env var will loss after terminal closed)
+> export TEST=1     (set environment variable; this is not permanently; this env var will loss after terminal closed)
 > echo $TEST        (read the environment variable)
 set enviroment variable permanently, you need to do the following:
 > vi .bashrc
-> TEST = '123'      (add this line to .bashrc)
+> TEST='123'        (add this line to .bashrc)
 > export TEST       (add this line to .bashrc)
 set global enviroment variable permanently
 > vi /etc/profile or > vi /etc/bashrc
-> TEST = '123'              (add this line to the file)
+> TEST='123'                (add this line to the file)
 > export TEST               (add this line to the file)
 $HOME -> start with $ sign means environment variable
 > cd $HOME  (same as cd ~)
@@ -507,6 +581,8 @@ in general:
 partition   ->  assign file system  ->  mount
 
 
+> tune2fs -> adjust tunable filesystem parameters on ext2/ext3/ext4 filesystems
+
 
 Logical Volume Management (LVM)
 LVM allows disk to be combined together
@@ -539,10 +615,11 @@ RAID5: eg. at least 3 harddisk, 5G+5G+5G=12G    (can recover if one disk is fail
 
 Network Files
 /etc/nsswitch.conf
-/etc/hosts
+/etc/hosts                       (The /etc/hosts is an operating system file that translate hostnames or domain names to IP addresses. )
 /etc/hostname
 /etc/sysconfig/network-scripts
 /etc/resolv.conf                (tells the dns server)
+/etc/hosts.allow                (list of hosts that are allowed to access the system)
 
 > vi /etc/hosts  (like a DHCP server, you can add the local host IP and the name here)
 inside the file, you can write
@@ -557,6 +634,8 @@ network command
 > netstat -rnv      (check the gateway)
 > tcpdump -i enp0s3 (provide the interface name and check the traffic in and out)
 > ip
+> route
+> route and > netstat  (show the routing table)
 
 
 
@@ -581,6 +660,10 @@ wget just like the browswer to download something from the internet
 Network Commands
 > ping
 > curl <url>
+
+
+the following path tell the Debian Linux where to load the package
+/etc/apt/sources.list
 
 
 
@@ -632,7 +715,7 @@ rsync -avzh ryanhung@192.168.0.10:/home/ryanhung/serverfile /tmp/backups   (home
 Hostname or IP Lookup
 > nslookup                  (then it enter a tool; type the domain name like www.google.com; it will return the ip address; type "exit" to quit the tool)
 > nslookup www.google.com   (then it shows the answer directly)
-> dig www.google.com        (similar to nslookup)
+> dig www.google.com        (similar to nslookup; DNS lookeup)
 
 
 
@@ -711,3 +794,7 @@ echo "Hello World"
 save it as test.sh and then change the permission to
 > chmod 744 test.sh 
 > ./test.sh             (to run the shell script)
+
+
+
+The SysV init is a standard process used by Red Hat Linux to control which software the init command launches or shuts off on a given runlevel.

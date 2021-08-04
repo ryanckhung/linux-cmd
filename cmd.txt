@@ -479,6 +479,7 @@ System Maintenance (need to be root)
 > reboot
 > halt               (force to shutdown = force to press the physical power button)
 > shutdown -r now    (shutdown immediately)
+> poweroff
 
 
 

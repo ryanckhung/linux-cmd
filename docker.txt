@@ -1,0 +1,151 @@
+Control groups, known as cgroups, are a feature of the Linux kernel allowing the limitation, accounting, and isolation of resources used by groups of processes and their subgroups.
+Cgroups are a fundamental feature of various Operating System level virtualization mechanisms, such as OpenVZ and LXC.
+Cgroups allow the limitation of memory, disk I/O, and network usage for a group of processes. In addition, cgroups may set usage quotas, and prioritize a process group to receive more CPU time or memory than other groups. 
+Containers benefit from cgroups primarily because they allow system resources to be limited for processes grouped by a container.
+Path: /sys/fs/cgroup
+
+> sudo -i                           (switch to root user)
+> apt-get install -y cgroup-tools   (install the cgroup)
+> lscgroup                          (list all cgroups in the system)
+> cat /proc/<PID>/cgroup            (list cgroups associated with a process)
+> cat  /proc/1/cgroup
+> cd /sys/fs/cgroup/freezer
+> mkdir mycgroup
+> cd mycgroup
+> echo <pid> >> tasks               (add the porcess id to the tasks file)
+> echo FROZEN > freezer.state       (make the process with pid stated in tasks file to be frozen)
+> echo THAWED > freezer.state       (make the process with pid stated in tasks file return normal)
+(read the lab for more)
+
+
+Namespaces are a feature of the Linux kernel allowing groups of processes to have limited visibility of the host system resources.
+Namespaces isolate processes from one container to prevent them from modifying the hostname, network interfaces, or mounts for processes running in other containers.
+Processes running inside a namespace are aware of any changes in the local namespaced system resources, however, such changes will not be visible to other processes or other namespaces.
+
+
+UnionFS is a feature found in the Linux, FreeBSD and NetBSD kernels, allowing the overlay of separate transparent file systems to produce an apparent single unified file system.
+When the content of several file systems, called branches, are virtually stacked, their contents appear to be merged, however, physically, they remain separate.
+However, virtually, through the unified file system, it appears as if the original file has been modified instead.
+In a container, unionfs allows for changes to be made to the container image at runtime. The container image and other writable file systems are all stacked into a unionfs when the container is created and is running. 
+
+[generally speaking: cgroup - limit resource; namespace - provide isolation; UnionFS - merging data]
+
+Operating System level virtualization is typically used to limit usage and securely isolate resources shared between multiple programs or users, and to separate programs to run in their own assigned virtual environments for better security and resource management.
+Chroot is a mechanism implementing OS-level virtualization.
+Chroot operates on a UNIX-like operating system by changing the apparent root directory of a process and its children. This apparent root directory is no longer the real root directory of the operating system, it is a virtual root directory - commonly referred to as a chrooted directory. 
+
+
+Type of virtualization   (history - pay attention to LXC):
+1. Chroot
+Chroot is a mechanism implementing OS-level virtualization. It was first introduced on UNIX Version 7 in 1979, then in 1982 it was added to BSD.
+Chroot operates on a UNIX-like operating system by changing the apparent root directory of a process and its children. This apparent root directory is no longer the real root directory of the operating system, it is a virtual root directory - commonly referred to as a chrooted directory.
+2. FreeBSD Jail
+A FreeBSD jail is a mechanism implementing OS-level virtualization with very little overhead. It was first introduced in 2000 on FreeBSD systems.
+FreeBSD jail allows for the partitioning of a FreeBSD system into many independent systems, called jails. They share the same kernel, but virtualize the system’s files and resources for improved security and administration through clean isolation between services.
+3. Solaris Zone
+A Solaris zone is a mechanism implementing OS-level virtualization. It was first introduced in 2004 on Solaris 10 systems.
+4. OpenVZ
+OpenVZ is a mechanism implementing OS-level virtualization; it was first introduced in 2005 on Linux systems.
+OpenVZ allows a physical host to run multiple isolated virtual instances - called containers, virtual environments or virtual private servers. OpenVZ containers share the same kernel, and can only run Linux.
+5. LXC
+LXC, or Linux Containers, is a mechanism implementing OS-level virtualization; it was first introduced in 2008 on Linux systems.
+LXC allows multiple isolated systems to run on a single Linux host, using chroot and cgroups, together with namespace isolation features of the Linux kernel to limit resources, set priorities, and isolate processes, the filesystem, network and users from the host operating system.
+6. Systemd-nspawn
+Systemd-nspawn is a mechanism implementing OS-level virtualization; it was first introduced in 2010 on Linux systems.
+
+
+Container Runtime:
+Docker is one of the most robust and complex container development and management platforms in the container industry. Although we list it here as a container runtime, Docker is a lot more than just a simple, or not so simple, container platform. The Docker platform supports a wide range of operations, from container image management to container lifecycle and runtime management.
+The Docker client is the CLI tool that allows users to run docker commands against a Docker daemon running on a Docker host.
+The Docker host is a system running the Docker daemon - called dockerd. The daemon is responsible for building, running, and distributing Docker containers. 
+The Docker registries store Docker container images.
+> sudo apt-get install -y docker.io
+> sudo docker run hello-world           (deploy a hello world for test)
+
+The key component required for the creation of a container image is the Dockerfile. It includes a set of instructions that are executed by the Docker daemon to build the image.
+* FROM to initialize the image build and specify the base image used as starting point for the current build,
+* COPY to populate the container’s filesystem with existing directories or files from the host system,
+* RUN to execute commands that alter the base image and commit the changes,
+* CMD to provide defaults for the running container,
+* ENTRYPOINT to configure a container’s command line arguments by overriding defaults specified by CMD,
+* LABEL to add metadata in a key-value pair format to the image,
+* EXPOSE to specify the port number and protocol which should be published as options with the docker run command,
+* ENV to set environment variables in a key-value pair format,
+* VOLUME to mount storage in the container,
+* USER to set the user name and possibly the group name at runtime.
+
+command reference URL:
+https://docs.docker.com/engine/reference/commandline/docker/
+> docker image build
+> docker image ls
+> docker image prune    (Remove unused images)
+> docker image push
+> docker image pull
+> docker image rm
+> docker image inspect  (Display detailed information on one or more images)
+
+some other example:
+> sudo docker serach nginx
+> sudo docker image pull nginx                                  (pull image from docker hub)
+> sudo docker image pull myregistry.com:5000/alpine:latest      (Pull an image from a private registry, by specifying registry name, port number, image name and tag)
+> sudo docker image ls                                          (list images cached in the local repository)
+> sudo docker login                                             (will login to docker hub)
+> sudo docker image push lfstudent/alpine:training              (push to docker hub)
+> sudo docker image push myregistry.com:5000/alpine:training    (push to private registry)
+> sudo docker image prune                                       (remove unused cached images from local repository)
+> sudo docker image rm -f alpine:latest nginx:latest            (remove one or more cached images from local repository)
+> sudo docker image inspect nginx                               (display image details)
+
+
+
+Other container runtime, example:
+LXC and LXD, Kata Containers, gVisor, Podman, runc, containerd, rkt, CRI-O
+
+Container runtime provide platform for the management of container environments and their lifecycle. 
+A container is a process running on the host system. This process is started by the container runtime from a container image, and the runtime provides a set of tools to manage the container process. The container is an isolated environment that encapsulates a running application, and it runs based on the configuration defined in the container image.
+At runtime, virtualization features available at the kernel level are attached to the container process to help manage various aspects of the container’s virtual environment. Namespaces virtualize the container process’s PID, network, root, and users. Cgroups help set resource usage limits the container process can consume on the host system, and security contexts enforce permissions the container process has on the host system.
+A container, as a runtime object, consumes the typical resources any running process would consume on a system: storage for the file system and any saved configuration files, CPU, memory, and networking to serve traffic to/from external clients, and other containers or devices on the system.
+
+
+
+Docker, the most complex container platform, supports a wide range of container operations. 
+Traditionally, there is a set of commands such as docker create, docker start, docker stop, docker restart, docker kill, docker remove that allow a user to alter the state of a container, together with docker ps for a listing of containers, docker logs to display container logs, docker inspect displays detailed information about an object, and docker stats displays resource usage.
+> docker create
+> docker start
+> docker stop
+> docker restart
+> docker kill
+> docker remove
+> docker ps                 (list containers)
+> docker logs               (display container logs)
+> docker inspect            (display detailed info about an object)
+> docker stats              (display resource usage)
+> docker start              (start stopped containers)
+> docker container start    (start stopped containers)
+> docker container inspect  (display details about containers)
+# command allo to interact with the processes running inside a container
+> docker exec               (run cmd in a running container)
+> docker container exec     (run cmd in a running container)
+> docker pause              (pause processes inside one or more containers)
+> docker container pause    (pause processes inside one or more containers)
+> docker unpause            (unpause processes inside one or more containers)
+> docker container unpause  (unpause processes inside one or more containers)
+> docker run                (run a command in a new container)
+> docker container run      (run a command in a new container)
+> docker top                (lists processes running in a container)
+> docker container top      (lists processes running in a container)
+
+
+Lab 6.2
+> sudo docker image pull alpine                                     (pull from docker hub)
+> sudo docker image pull <private_registry>:<port>/image            (pull from private registry)
+> sudo docker image ls                                              (list images available in the local repository)
+> sudo docker container create -it alpine share                     (create container from the image available in hte local repository; assume the container id begin with 6ac)
+> sudo docker container start 6ac                                   (start the created container with a partial container id)
+> sudo docker contaienr ls                                          (list running containers)
+
+
+
+Useful tips:
+> docker            (just type docker then enter, it will show the available option)
+> docker image      (just type "docker image" then enter, it will show the avaiable option)

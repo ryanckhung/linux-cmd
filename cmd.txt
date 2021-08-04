@@ -25,6 +25,9 @@ sudo chage -d 0 test04
 sudo apt-get install docker.io
 sudo systemctl start docker
 
+# if the application is .deb file download from the internet (eg. chrome)
+> sudo dpkg -i xxx.deb
+
 
 
 # Find all the files whose name is tecmint.txt in a current working directory.
@@ -329,7 +332,8 @@ Files
 Acount management
 > su - spiderman    -> assume you are ironman now, you want to switch to spiderman, type "su - spiderman"
 > exist             -> switch back to orignal user (ironman in this case)
-> su -              -> swithc to root
+> su -              -> swithc to root  (should use "sudo -i")
+> sudo -i           -> login as root
 > whoami            -> check the current user
 if you are ironman, you can't access /home/spiderman. (unless permission is given)
 after created the account, the root user need to add the sudo permission to this newly created account

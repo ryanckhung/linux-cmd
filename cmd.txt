@@ -22,8 +22,9 @@ sudo chage -d 0 test04
 /ect/passwd
 
 # install docker
-sudo apt-get install docker.io
-sudo systemctl start docker
+> sudo apt-get update
+> sudo apt-get install docker.io
+> sudo systemctl start docker
 
 # if the application is .deb file download from the internet (eg. chrome)
 > sudo dpkg -i xxx.deb

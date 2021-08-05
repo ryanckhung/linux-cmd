@@ -204,6 +204,7 @@ The binary /bin/echo​ runs directly inside the container, and participates in 
 
 
 Dockerfile Instructions
+https://docs.docker.com/engine/reference/builder/
 The instructions can be divided into two distinct categories - build time and run time instructions.
 build time: FORM, ARG, RUN, LABEL, EXPOSE, COPY, ADD, WORKDIR, ENV, VOLUME, USER, ONBUILD, STOPSIGNAL, HEALTHCHECK, SHELL​
 run time: CMD, ENTRYPOINT

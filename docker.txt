@@ -140,12 +140,76 @@ Lab 6.2
 > sudo docker image pull alpine                                     (pull from docker hub)
 > sudo docker image pull <private_registry>:<port>/image            (pull from private registry)
 > sudo docker image ls                                              (list images available in the local repository)
-> sudo docker container create -it alpine share                     (create container from the image available in hte local repository; assume the container id begin with 6ac)
+> sudo docker container create -it alpine sh                        (create container from the image available in hte local repository; assume the container id begin with 6ac)
 > sudo docker container start 6ac                                   (start the created container with a partial container id)
-> sudo docker contaienr ls                                          (list running containers)
+> sudo docker container ls                                          (list running containers)
+> sudo docker container run -it --name myalpine alphine sh          (--name provide the name of the container, sh here is the cmd to be run)
+(the above command will make it run inside the container; to quit press Ctrl p + Ctrl q)
+> sudo docker container ls -a                                       (will list out both running and stopping containers)
+> sudo docker container attach myalpine                             (make the running docker myalpine to be in attach mode (foreground))
+> sudo docker container run -d alpine /bin/sh -c 'while [ 1 ]; do echo "hello world from container"; sleep 1; done' (/bin/sh -c '' is the cmd to be run)
+> sudo docker container logs be9                                    (get the logs from the container, be9 is the short form of the container id)
+> sudo docker container stop be9                                    (stop the running container only; the container still there)
+> sudo docker container start be9                                   (start a stopped container)
+> sudo docker container restart be9                                 (stop and start a container)
+> sudo docker container pause be9                                   (pause a container)
+> sudo docker container unpause be9                                 (unpause a container)
+> sudo docker container rename original_name new_name               (rename a running container)
+# remove a container: method 1
+> sudo docker container stop hello_world
+> sudo docker container rm hello_world
+# remove a container: method 2
+> sudo docker container rm -f myalpine
+> sudo docker container run --rm --name new_name alpine ping -c 3 google.com        (--rm remove the container when nothing to run)
+> sudo docker container run -it --env "WEB_HOST=172.168.1.1" --rm alpine sh
+> sudo docker container exec dreamy_golick ip a                                     (execute a command inside a running container)
+> sudo docker container run -d --restart=always --name web-always nginx             (awlays restrun when it's fail)
+> sudo docker container run -d --restart=on-failure:3 --name web-on-failure nginx   (try 3 times to wake it up if it's fail)
+> sudo docker container prune                                                       (kill all exited containers)
 
+-it (TTY at interactive mode)
+--name (provide the name of the container)
+attach (make the running container in the attach mode)
+-d (make the newly running container to run in detach mode)
+logs, stop, start, restart, pause, unpause, rename
+--rm (remove the container when it's going to exit)
+--env (specify the environment)
+-w (specify the workding directory of the container)
+-h (specify the host name of the container)
+--ulimit nproc=10 (limit the max user process for the container)
+--cupset-cpus="0" (set the CPU going to run this container)
+--memory "200m" (set the memory size to use)
+--restart=always (restart if the container fail)
+--restart=on-failure:3 (try 3 times if fail)
+prune (kill all existed containers)
 
 
 Useful tips:
 > docker            (just type docker then enter, it will show the available option)
 > docker image      (just type "docker image" then enter, it will show the avaiable option)
+
+
+
+Docker Instruction Formats:
+* Shell Form
+The commands specified as arguments of the CMD instruction run inside a shell. Here is an example of the CMD instruction with arguments in shell form:
+CMD echo "We are learning about Dockerfile"
+On Linux, the instruction would look like this:
+/bin/sh -c echo "We are learning about Dockerfile"
+The default shell on Linux is /bin/sh/ -c. However, we can change the default shell with the SHELL​ instruction of the Dockerfile.
+* Exec Form
+In this form, the binary/program is run directly, without a shell. Here is an example of the CMD instruction with arguments in exec form:
+CMD ["/bin/echo", "We are learning about Dockerfile"]
+The binary /bin/echo​ runs directly inside the container, and participates in the build process. Between the two forms, the Exec Form is preferred by users.
+
+
+Dockerfile Instructions
+The instructions can be divided into two distinct categories - build time and run time instructions.
+build time: FORM, ARG, RUN, LABEL, EXPOSE, COPY, ADD, WORKDIR, ENV, VOLUME, USER, ONBUILD, STOPSIGNAL, HEALTHCHECK, SHELL​
+run time: CMD, ENTRYPOINT
+If we want to exclude some files and directories during the ​ docker image build​ process, then we should list them in the .dockerignore​ file in the referenced folder:
+> cat .dockerignore
+code
+tmp
+test.py
+The above .dockerignore file list all the thing which is going to exclude in the build process.

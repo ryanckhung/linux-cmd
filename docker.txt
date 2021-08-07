@@ -260,3 +260,42 @@ It is recommended, however, the use of a tmpfs mount for ephemeral data, not onl
 Persistent data, however, is critical data that has to be stored in a location that provides data resilience, to then later be managed by an aggregator or other applications designed to process and manage critical data. 
 Persistent data is recommended to be stored on external persistent volume mounts managed from the Docker CLI for easy backup and migration, flexibility, portability, sharing, and extended functionality. Persistent volumes are not managed by UnionFS, are not specified and defined only within the scope of a container, and do not get deleted together with the container.
 
+
+
+
+
+# Container Storage: command
+# Volume vs Bind Mode
+# Volume is the suggested (official) way to use storage. The volume is created by the docker and stored in the default path "/var/lib/docker/volumes", you can't specify the path by yourself
+# Bind mode: you can create the path in the host by yourself and map it to the docker 
+
+# The following command is for volume
+> docker container run -it --mount target=/data --name cvol alpine sh (this create a volume in /var/lib/docker/volumes/<docker_generated_id>/_data; <docker_generated_id> because source is not provided)
+> docker container run -it -v /data --name cvol alpine sh  ("-v /data" is the short cut for "--mount target=/data")
+> docker container run -it --mount source=mountvol,target=/data --name cmountvol alpine sh (this create a volume in /var/lib/docker/volumes/mountvol/_data; this time is not <docker_generated_d> because source is provided)
+> docker container run -it -v mountvol:/data --name cmountvol alpine sh (same as above; "-v mountvol:/data" is short cut for "-mount source=mountvol,target=/data")
+# display container details to view mounted volume
+> docker container inspect cvol     (then check "Mounts:Name")
+> ls /var/lib/docker/volumes/<the_name_checked_in_above_line>/_data
+# list volumes
+> docker volume ls
+# create a named volume (those previous commands create the volume through container; this is create a volume directly)
+> docker volume create --name myvol (docker create a volume in /var/lib/docker/volumes/myvol/_data)
+> docker container run -it --mount source=myvol,target=/data --name cmyvol alpine sh (source=myvol, use the volume created in the previous command line)
+# Remove a volume together with the container (the volume crated with the container; not created independently)
+> docker container rm -f -v cvol (-v is to remove the volume together with the container)
+# Remove a volume
+> docker volume ls
+> docker volume rm <volume_name> (this will give an error if volume is in use)
+
+
+# The folllowing command is for bind mode
+> mkdir /mnt/shared (create a directory in the host for stroage)
+> docker container run -it --mount type=bind,source=/mnt/shared,target=/data --name csharedvol alpine sh    (type=bind means bind mode; if not specify it's volume; bind mode can create a path in host; volume path is defualted by docker)
+> mkdir /tmp/ro
+> docker container run -it --mount type=bind,source=/tmp/ro,target=/data,readonly --name csharedvol alpine sh (readonly will make all the thing inside the container /data to be readonly; only the host can modify the file)
+
+# system command on volume
+> docker system df (check the disk space)
+> docker volume prune (remove all unused volumes)
+

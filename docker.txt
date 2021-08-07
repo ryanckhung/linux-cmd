@@ -241,6 +241,14 @@ Network plugins expand the capabilities of Docker through third-party network dr
 
 
 
+# Network command
+> docker network ls (there are 3 networks created by default; they are the bridge, host and none)
+> docker network inspect <network_id> (you should see "subnet":"172.17.0.0/16"; also the containers IP)
+
+
+
+
+
 
 
 Container storage

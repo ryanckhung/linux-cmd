@@ -283,7 +283,7 @@ Persistent data is recommended to be stored on external persistent volume mounts
 > docker volume create --name myvol (docker create a volume in /var/lib/docker/volumes/myvol/_data)
 > docker container run -it --mount source=myvol,target=/data --name cmyvol alpine sh (source=myvol, use the volume created in the previous command line)
 # Remove a volume together with the container (the volume crated with the container; not created independently)
-> docker container rm -f -v cvol (-v is to remove the volume together with the container)
+> docker container rm -f -v cvol (-v is to remove the volume together with the container; if the container removed without telling docker to remove the volume, the volume will be kept)
 # Remove a volume
 > docker volume ls
 > docker volume rm <volume_name> (this will give an error if volume is in use)

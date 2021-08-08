@@ -245,6 +245,13 @@ Network plugins expand the capabilities of Docker through third-party network dr
 > docker network ls (there are 3 networks created by default; they are the bridge, host and none)
 > docker network inspect <network_id> (you should see "subnet":"172.17.0.0/16"; also the containers IP)
 
+# Example: create 2 container and try to ping each other
+# Newly created container must be attached to the default bridge network
+> sudo docker run -it --name con01 alpine sh
+> sudo docker run -it --name con02 alpine sh
+> sudo docker network ls
+> sudo docker network inspect <default_bridge_network_id> (you can see the 2 containers is attached to this network)
+> sudo docker attach con01 (try to pint the container con02)
 
 
 

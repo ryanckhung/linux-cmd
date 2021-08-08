@@ -241,9 +241,59 @@ Network plugins expand the capabilities of Docker through third-party network dr
 
 
 
-# Network command
+# Network command 
+there is a default bridge network created by Docker; 
+all newly created container, without specify the network will connect to the defualt bridge network
+all newly created container, without specify the network information cannot be accessed by the host; 
+all newly created container, must specify the port (Eg. -p 80:80) to make the host can access the container service
+
 > docker network ls (there are 3 networks created by default; they are the bridge, host and none)
 > docker network inspect <network_id> (you should see "subnet":"172.17.0.0/16"; also the containers IP)
+> docker network create -d bridge --attachable mynet (create a user-defined network; if -d bridge is missed, the default is also a bridge network; this time the subnet is added as 172.18.0.0/16)
+> docker network create testnet (this will create a network with name testnet with bridge as driver)
+> docker network ls (can check the newly created network status)
+> docker network rm testnet (must make sure no container is attached to this testnet)
+> docker network prune (remove all unused network)
+
+> docker container run -d --name web nginx (it will attach to the defualt bridge network; it is not accessible by the host; but can access by container which attach to the same bridge network)
+> docker container inspect web  (check the details of the container; "NetworkSettings"->"IPAddress"->"NetworkID")
+
+When Docker daemon starts, it creates a docker0 network bridge on the host system. By default, all containers connect to the docker0 network bridge.
+Docker creates a veth pair to attach a container to a bridge. One end of the veth pair is attached to the bridge while the other end to the container.
+The bridge side of the veth pair is vethcbba2f9@if7 while the container end of the veth pair is eth0.
+> ip a (in the host, you can see docker0 and vethcbba2f9@if7)
+
+> docker container run -d --name web1 -p 80:80 nginx (this will make the container attach to the default bridge network and let the host can access the container by HOSTIP:PORT, -p hostPort:containerPort)
+> curl host_ip:port  (this can access the content of the newly created nginx container by the host)
+
+if you create more than 1 nginx, the host port can't be repeated
+> docker container run -d --name web1 -p 8080:80 nginx  (you can't repeat to map 8080:80; must use 8080,8081,8082,8083)
+> docker container run -d --name web2 -p 8081:80 nginx
+> docker container run -d --name web3 -p 8082:80 nginx
+> docker container run -d --name web4 -p 8083:80 nginx
+
+> docker continer run -d --name web5 -P nginx (-P will tell docker to assign a random port to the container; it's useful when many containers are attach to the network)
+
+> docker container run -it --network=none alpine sh (this make the container doesn't connect to the network; even not connected to the defualt bridge network)
+
+Connect the container to the host network
+> docker container run -it --network=host alpine sh (--network=host, make it use the same ip config as the host [exactly the same]; this no need to make -p 80:80 becuase it's in the same network as host)
+
+> docker container exec -it web6 sh (web6 container is running; exec make it run the shell)
+> apt update (inside the nginx shell, no apt-get, just use apt)
+> apt install -y iproute2 (this install the "ip" command)
+
+Run a container and attach it to an existing network
+> docker network create mynet (this create a mynet network bridge)
+> docker container run -it --network=mynet alpine sh (this will make the container attach to the mynet, but not attach to the default network bridge)
+
+Attach a container to Default Bridge network and created network
+> docker container run -it --name alpine alpine sh (this make it attach to the defualt network)
+> docker network connect mynet alpine (this make the container also attached to the mynet network)
+> docker container inspect alpine (can check which network that the container is connected)
+Disconnect the container from the network
+> docker network disconnect mynet alpine (disconnect from the network)
+
 
 # Example: create 2 container and try to ping each other
 # Newly created container must be attached to the default bridge network
@@ -252,6 +302,8 @@ Network plugins expand the capabilities of Docker through third-party network dr
 > sudo docker network ls
 > sudo docker network inspect <default_bridge_network_id> (you can see the 2 containers is attached to this network)
 > sudo docker attach con01 (try to pint the container con02)
+
+
 
 
 

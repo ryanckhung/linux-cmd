@@ -8,4 +8,40 @@ Current trends and changes to the distributions have reduced some of the differe
 * ip (network display and configuration tool)
   the ip program is part of the net-tools package, and is designed to be a replacement for the ifconfig command. The ip command will show or manipluate routing, network devices, routing information and tunnels.
   
-    
+Setup in AWS
+1. OS: Ubuntu
+2. Instances type: m5a.large (2 CUP, 8G Memory, upto 10Gigabit network)
+3. Number of instances: 2 instance    
+4. storage: 20GiB
+5. Security Group: All Traffic
+
+
+
+
+Basic of Kubernetes
+Running a container on a laptop is relatively simple. But, connecting containers across multiple hosts, scaling them, deploying applications without downtime, and service discovery among several aspects, can be difficult. 
+Kubernetes addresses those challenges from the start with a set of primitives and a powerful open and extensible API. The ability to add new objects and controllers allows easy customization for various production needs. 
+According to the kubernetes.io website, Kubernetes is: "an open-source system for automating deployment, scaling, and management of containerized applications".
+
+Instead of using a large server, Kubernetes approaches the same issue by deploying a large number of small servers, or microservices. The server and client sides of the application are written to expect that there are many possible agents available to respond to a request. 
+It is also important that clients expect the server processes to die and be replaced, leading to a transient server deployment. Instead of a large Apache web server with many httpd daemons responding to page requests, there would be many nginx servers, each responding. 
+
+The transient nature of smaller services also allows for decoupling. Each aspect of the traditional application is replaced with a dedicated, but transient, microservice or agent. To join these agents, or their replacements together, we use services. 
+A service ties traffic from one agent to another (for example, a frontend web server to a backend database) and handles new IP or other information, should either one die and be replaced. 
+
+
+
+Kubernetes Architecture:
+- Control Plane Nodes (control a lot of worker nodes; he cp runs an API server, a scheduler, various controllers and a storage system to keep the state of the cluster, container settings, and the networking configuration.)
+  kubectl (provide API call)
+  etcd
+  kube-apiserver
+  kube-scheduler
+  kube-controller-manager
+  kubelet
+  kube-proxy
+- Worker Node
+  kubelet    (The kubelet receives requests to run the containers, manages any resources necessary and works with the container engine to manage them on the local node.)
+  kube-proxy (The kube-proxy creates and manages networking rules to expose the container on the network to other containers or the outside world.)
+
+  A Pod consists of one or more containers which share an IP address, access to storage and namespace. 

@@ -366,3 +366,21 @@ Persistent data is recommended to be stored on external persistent volume mounts
 > docker system df (check the disk space)
 > docker volume prune (remove all unused volumes)
 
+
+For environment variable, you don't need to specify in the Dockerfile. But you need to edit it in the python code and the docker command. That is:
+* Python code: 
+import os
+try:
+  DOWNLOAD_TIME_INTERVAL = int(os.environ["TIME_INTERVAL"])
+except:
+  DOWNLOAD_TIME_INTERVAL = 5 #default value in case env var is not supplied
+* Docker Command to run after build
+> docker container run -e TIME_INTERVAL="3" tmp_contqainer  (the -e option will supply the evnironment to python)
+
+
+More Real Examples:
+> docker run -d -p 80:80 --mount type=bind,source=/tmp/data,target=/usr/src/app/data -e TIME_INTERVAL="3" --name highways highways
+this command bind the host volume "/tmp/data" to the container path "/usr/src/app/data"; must specify the full path in both of the host and container
+-e is the enviroment variable spccify in the code 
+-p is map the host port to container port
+

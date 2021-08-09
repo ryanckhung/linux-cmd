@@ -384,3 +384,17 @@ this command bind the host volume "/tmp/data" to the container path "/usr/src/ap
 -e is the enviroment variable spccify in the code 
 -p is map the host port to container port
 
+
+
+
+Sample Docker File:
+FROM python:3
+WORKDIR /usr/src/app
+COPY requirements.txt ./
+RUN pip install -r requirements.txt
+COPY . .
+EXPOSE 80
+CMD [ "python", "./main.py" ]
+
+
+

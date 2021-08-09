@@ -397,4 +397,7 @@ EXPOSE 80
 CMD [ "python", "./main.py" ]
 
 
+Import and Export the Docker Images:
+> docker save <my_local_image> > xxx.tar
+> docker load --input xxx.tar
 

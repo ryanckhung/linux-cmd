@@ -806,6 +806,11 @@ shell script with variable
 name="Mokhtar" 
 echo "$name"
 
+shell script with bash command as variable
+#!/bin/bash
+running_container=`ps aux | grep -i highways | wc -l | xargs` 
+echo "$running_container"
+
 
 
 The SysV init is a standard process used by Red Hat Linux to control which software the init command launches or shuts off on a given runlevel.

@@ -801,6 +801,11 @@ save it as test.sh and then change the permission to
 > chmod 744 test.sh 
 > ./test.sh             (to run the shell script)
 
+shell script with variable
+#!/bin/bash
+name="Mokhtar" 
+echo "$name"
+
 
 
 The SysV init is a standard process used by Red Hat Linux to control which software the init command launches or shuts off on a given runlevel.

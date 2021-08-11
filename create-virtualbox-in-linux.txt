@@ -1,0 +1,13 @@
+# if there is a Hash sum mismatch, please run the followito clear the ATP cache
+> sudo rm -rf /var/lib/apt/lists/*
+> sudo apt clean
+> sudo apt update
+
+# remove the install virtualbox if needed
+> sudo apt-get remove virtualbox* --purge
+
+# install virtualbox
+https://phoenixnap.com/kb/install-virtualbox-on-ubuntu
+> sudo apt-get update
+> sudo apt-get install virtualbox
+> sudo apt-get install virtualbox—ext–pack

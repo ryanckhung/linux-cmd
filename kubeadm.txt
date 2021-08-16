@@ -2,6 +2,12 @@
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 From the above URL, please refer to session "Installing kubeadm, kubelet and kubectl" 
 Debian-based distribution
+From other reference site, you should make the swapoof
+
 
 # kube admin
 https://kubernetes.io/docs/reference/setup-tools/kubeadm/
+
+# other reference
+https://www.mirantis.com/blog/how-install-kubernetes-kubeadm/
+> sudo swapoff -a

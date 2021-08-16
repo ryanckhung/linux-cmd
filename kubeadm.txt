@@ -3,7 +3,9 @@ https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-ku
 From the above URL, please refer to session "Installing kubeadm, kubelet and kubectl" 
 Debian-based distribution
 
-# From other reference site, you should make the swapoof
+# VERY IMPORTANT VERY IMPORTANT VERY IMPORTANT!!!
+> sudo swapoff -a
+# From other reference site, you should make the swapoff
 The Kubernetes scheduler determines the best available node on which to deploy newly created pods. If memory swapping is allowed to occur on a host system, this can lead to performance and stability issues within Kubernetes. For this reason, Kubernetes requires that you disable swap in the host system.
 
 

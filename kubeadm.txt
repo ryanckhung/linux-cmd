@@ -1,4 +1,4 @@
 # to install the kubeadm
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
-refer to: Installing kubeadm, kubelet and kubectl 
+From the above URL, please refer to session "Installing kubeadm, kubelet and kubectl" 
 Debian-based distribution

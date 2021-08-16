@@ -814,3 +814,7 @@ echo "$running_container"
 
 
 The SysV init is a standard process used by Red Hat Linux to control which software the init command launches or shuts off on a given runlevel.
+
+
+# about /etc/hosts
+Your browser uses entries in the /etc/hosts file to override the IP-address-to-URL mapping returned by a DNS server. This is useful for testing DNS (domain name system) changes and the SSL configuration before making a website live.

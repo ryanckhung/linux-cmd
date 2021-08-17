@@ -28,9 +28,9 @@ http {
 }
 
 Remark for the above config:
-1. listen is refer to port
-2. server_name is the domain name or ip which the web browser call
-3. root refer to the place where your file place /test_sites refer to a folder where located at the root of the system
+1. listen: listen port number
+2. server_name: simply put the ip of the machine
+3. root: where you put your index.html; this example put all the web content into /test_sites
 
 //=====================================================//
 Linux command to access the internet:

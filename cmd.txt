@@ -108,7 +108,10 @@ example:
 ls -l /root 2> errfile.txt  => not root user access /root folder will give permssion eror; 2 means stderr; this cmd will only redirect the err msg to file
 File descriptor 1 is the standard output (stdout).
 File descriptor 2 is the standard error (stderr).
+
 2>&1  -> ">&" as redirect merger operator
+https://zhuanlan.zhihu.com/p/47765176
+2>&1表明将文件描述2（标准错误输出）的内容重定向到文件描述符1（标准输出），为什么1前面需要&？当没有&时，1会被认为是一个普通的文件，有&表示重定向的目标不是一个文件，而是一个文件描述符。在前面我们知道，test.sh >log.txt又将文件描述符1的内容重定向到了文件log.txt，那么最终标准错误也会重定向到log.txt。
 
 
 

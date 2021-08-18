@@ -118,6 +118,7 @@ Consider >& as redirect merger operator.
 
 sudo sh ./test.sh > log.txt 2>&1          (2>&1 means the error will also write to log.txt)
 sudo sh ./test.sh > log.txt 2> err.txt    (2> err.txt means the error will output to err.txt; normal message will goto log.txt)
+sudo sh ./test.sh 2>&1 >log.txt           (this 2>&1 will output the error to the terminal, because now 1 is refer to terminal; normal message will goto log.txt)
 
 
 

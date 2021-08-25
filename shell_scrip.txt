@@ -1,0 +1,22 @@
+#!/bin/bash
+# this script is use to remove the child folders with file less than 870 files
+# a=`pwd`; no spacing between "a="
+# `` = $()
+# if [], the [ xxx ] must have space between "[ x" and "x ]"
+
+# if []; then
+# fi
+# is same as
+# if[]
+# then
+# fi
+
+for entry in `ls -d */` 
+do
+    fileCount=`ls $entry | wc -l`
+    if [ $fileCount -lt 870 ] 
+    then
+        echo "drop $entry `ls $entry | wc -l`"
+        `sudo rm -r $entry`
+    fi
+done

@@ -15,3 +15,14 @@ https://kubernetes.io/docs/reference/setup-tools/kubeadm/
 # other reference
 https://www.mirantis.com/blog/how-install-kubernetes-kubeadm/
 > sudo swapoff -a
+
+
+ 
+
+# Important steps to kick it up.
+1. turn off the swap
+> sudo swapoff -a
+2. turn off the firewall
+3. try to reset kubeadm if give error
+> sudo kebeadm reset
+4. make sure the cgroup of k8s and docker are matched

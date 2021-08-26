@@ -26,3 +26,9 @@ https://www.mirantis.com/blog/how-install-kubernetes-kubeadm/
 3. try to reset kubeadm if give error
 > sudo kebeadm reset
 4. make sure the cgroup of k8s and docker are matched
+# check docker cgroup by
+> sudo docker info | grep -i cgroup
+# you will see something like (in the following example "cgroupfs" is the cgroup for docker)
+Cgroup Driver: cgroupfs
+# goto kubeadm-config.yaml and the following line
+cgroupDriver:cgroupfs

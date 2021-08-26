@@ -21,6 +21,8 @@ https://www.mirantis.com/blog/how-install-kubernetes-kubeadm/
 1. turn off the swap
 > sudo swapoff -a
 2. turn off the firewall
+> systemctl stop firewalld
+> systemctl satus firewalld
 3. try to reset kubeadm if give error
 > sudo kebeadm reset
 4. make sure the cgroup of k8s and docker are matched

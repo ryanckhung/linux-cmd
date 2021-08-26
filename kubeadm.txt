@@ -17,8 +17,6 @@ https://www.mirantis.com/blog/how-install-kubernetes-kubeadm/
 > sudo swapoff -a
 
 
- 
-
 # Important steps to kick it up.
 1. turn off the swap
 > sudo swapoff -a

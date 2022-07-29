@@ -1,0 +1,17 @@
+Generate a private key
+> openssl genrsa -aes128 -out private.pem 1024
+
+Generate a public key
+> openssl rsa -in private.pem -pubout > public.pem
+
+Make a file (for encryption later)
+> echo hello > hello.txt
+
+Encrypt a file using public key
+> openssl rsautl -encrypt -inkey public.pem -pubin -in hello.txt -out top_secret.enc
+
+Descrypt a file using the private key
+> openssl rsautl -decrypt -inkey private.pem -in top_secret.enc > top_secret.txt
+
+Output file is
+> top_secret.txt
